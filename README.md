@@ -1,36 +1,50 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Jena Babu Vlogs - Professional Portfolio 🇮🇳
 
-## Getting Started
+This is a 100% Free, Zero-maintenance portfolio website built for Suraj Jena (The Funny Blogger).
 
-First, run the development server:
+## 🚀 Quick Start
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+1. **Install Dependencies**:
+   ```bash
+   npm install
+   ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. **Run Locally**:
+   ```bash
+   npm run dev
+   ```
+   Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🛠️ Zero-Cost Automation Setup
 
-## Learn More
+### 1. YouTube Auto-Updates 📺
+- Open `src/lib/youtube.ts`.
+- Replace `const CHANNEL_ID = 'UC_REPLACE_WITH_REAL_ID';` with your actual YouTube Channel ID (Find it in your YouTube Studio URL).
+- The site will automatically pull your latest 6 videos every 6 hours using Vercel ISR (Incremental Static Regeneration).
 
-To learn more about Next.js, take a look at the following resources:
+### 2. Instagram Gallery 📸
+- Currently uses mocked data to ensure 100% uptime with zero API costs.
+- To make it real without paid APIs:
+  - Generate a `instagram.json` file using a GitHub Action scraper.
+  - Fetch that JSON in `src/components/InstagramGallery.tsx`.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### 3. Contact Form 📩
+- The form in `Collaboration.tsx` is powered by **Formspree**.
+- To activate:
+  1. Go to [Formspree.io](https://formspree.io) and create a free form.
+  2. Copy the endpoint URL (e.g., `https://formspree.io/f/xyza...`).
+  3. Add `action="YOUR_FORMSPREE_URL"` to the `<form>` tag in `src/components/Collaboration.tsx`.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 🎨 Design System
+- **Colors**: Odia Orange (#FF6B35), YouTube Blue (#1A73E8).
+- **Fonts**: Baloo 2 (Odia Headers), Inter (Body).
+- **Tech Stack**: Next.js 14/16, Tailwind CSS v4, Framer Motion.
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 📱 Features
+- **Hero**: Video background + Typing effect + Cursor Food.
+- **YouTube Hub**: Auto-sync with latest videos.
+- **Journey**: Interactive Timeline.
+- **Collaboration**: Professional Media Kit section.
+- **Map**: Google Maps Embed for Food Trail.
