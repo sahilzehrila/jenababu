@@ -16,38 +16,37 @@ import { SITE_CONFIG } from '@/lib/constants';
 // For the "Funny" tab, we can use a generic "Comedy" graphic or similar, OR just reuse the YT ones for now
 // to ensure consistency and "Realness".
 
-// Let's use the YT thumbnails as proxies for the "Vlog" posts to keep it looking real.
-const REAL_YT_THUMBS = [
-    'https://i.ytimg.com/vi/S7rEZ2zZP-Q/maxresdefault.jpg',
-    'https://i.ytimg.com/vi/dzj4n_OqExg/maxresdefault.jpg',
-    'https://i.ytimg.com/vi/SDtcR6HLMEU/maxresdefault.jpg',
-    'https://i.ytimg.com/vi/fqZjoPm0VIE/maxresdefault.jpg',
-    'https://i.ytimg.com/vi/lyYCWrbcNFQ/maxresdefault.jpg',
-    'https://i.ytimg.com/vi/Niwdof1hbp4/maxresdefault.jpg'
-];
+import { Video } from '@/lib/youtube';
 
-const MOCK_INSTA = {
-    vlogs: [
-        { id: 1, type: 'video', src: REAL_YT_THUMBS[0], likes: '2.4K' },
-        { id: 2, type: 'image', src: REAL_YT_THUMBS[1], likes: '1.8K' },
-        { id: 3, type: 'video', src: REAL_YT_THUMBS[2], likes: '3.1K' },
-        { id: 4, type: 'image', src: REAL_YT_THUMBS[3], likes: '5.2K' },
-        { id: 5, type: 'video', src: REAL_YT_THUMBS[4], likes: '4.0K' },
-        { id: 6, type: 'image', src: REAL_YT_THUMBS[5], likes: '2.9K' },
-    ],
-    funny: [
-        // specialized "funny" placeholders that look like memes/text
-        { id: 7, type: 'video', src: REAL_YT_THUMBS[5], likes: '10K' },
-        { id: 8, type: 'image', src: REAL_YT_THUMBS[4], likes: '8.5K' },
-        { id: 9, type: 'video', src: REAL_YT_THUMBS[3], likes: '12K' },
-        { id: 10, type: 'image', src: REAL_YT_THUMBS[2], likes: '9K' },
-        { id: 11, type: 'video', src: REAL_YT_THUMBS[1], likes: '11K' },
-        { id: 12, type: 'image', src: REAL_YT_THUMBS[0], likes: '15K' },
-    ]
-};
+interface InstagramPost {
+    id: string | number;
+    type: 'video' | 'image';
+    src: string;
+    likes: string;
+    link: string;
+}
 
-export default function InstagramGallery() {
+export default function InstagramGallery({ mainVideos, funnyVideos }: { mainVideos: Video[], funnyVideos: Video[] }) {
     const [activeTab, setActiveTab] = useState<'vlogs' | 'funny'>('vlogs');
+
+    // Generate dynamic Instagram-like posts from the YouTube feed for "Real Time" updates
+    const vlogsPosts: InstagramPost[] = mainVideos.map((v) => ({
+        id: v.id,
+        type: 'video',
+        src: v.thumbnail,
+        likes: v.views,
+        link: v.link
+    }));
+
+    const funnyPosts: InstagramPost[] = funnyVideos.map((v) => ({
+        id: v.id,
+        type: 'video',
+        src: v.thumbnail,
+        likes: v.views,
+        link: v.link
+    }));
+
+    const posts = activeTab === 'vlogs' ? vlogsPosts : funnyPosts;
 
     return (
         <section className="py-20 bg-white relative">
@@ -82,7 +81,7 @@ export default function InstagramGallery() {
                     className="grid grid-cols-2 lg:grid-cols-3 gap-2 md:gap-4 px-2 md:px-0"
                 >
                     <AnimatePresence mode="popLayout">
-                        {MOCK_INSTA[activeTab].map((post) => (
+                        {posts.map((post) => (
                             <motion.div
                                 key={post.id}
                                 layout
@@ -106,7 +105,7 @@ export default function InstagramGallery() {
                                 )}
 
                                 <Link
-                                    href={activeTab === 'vlogs' ? SITE_CONFIG.socials.instagram2 : SITE_CONFIG.socials.instagram1}
+                                    href={post.link}
                                     target="_blank"
                                     className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-2 text-white font-bold text-xl backdrop-blur-[2px]"
                                 >
@@ -114,7 +113,7 @@ export default function InstagramGallery() {
                                         <Heart className="fill-white" /> {post.likes}
                                     </div>
                                     <span className="text-xs font-normal border border-white/50 px-3 py-1 rounded-full flex items-center gap-1">
-                                        Open in App <ExternalLink size={12} />
+                                        View Post <ExternalLink size={12} />
                                     </span>
                                 </Link>
                             </motion.div>

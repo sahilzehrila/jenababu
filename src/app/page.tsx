@@ -7,12 +7,15 @@ import { getLatestVideos } from "@/lib/youtube";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 
-export const revalidate = 21600;
+export const revalidate = 3600;
 
 export default async function Home() {
-  const videos = await getLatestVideos();
-  // Use first video ID for background if available
-  const latestVideoId = videos.length > 0 ? videos[0].id : undefined;
+  const [mainVideos, funnyVideos] = await Promise.all([
+    getLatestVideos('UCjYWtd20ZhIWp1Qi806xtQw'), // Jena Babu Vlogs
+    getLatestVideos('UCRuzSPzSabqTs2rlXowJx4g')  // The Funny Blogger
+  ]);
+
+  const latestVideoId = mainVideos.length > 0 ? mainVideos[0].id : undefined;
 
   return (
     <main className="min-h-screen">
@@ -43,10 +46,10 @@ export default async function Home() {
       </section>
 
       {/* Videos Section on Home */}
-      <YouTubeFeed videos={videos} />
+      <YouTubeFeed videos={mainVideos} />
 
       {/* Instagram Section on Home */}
-      <InstagramGallery />
+      <InstagramGallery mainVideos={mainVideos} funnyVideos={funnyVideos} />
 
       <FoodMap />
       <Footer />
