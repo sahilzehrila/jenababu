@@ -27,16 +27,18 @@ export async function getLatestVideos(channelId: string = MAIN_CHANNEL_ID): Prom
 
         const feed = await parser.parseURL(`https://www.youtube.com/feeds/videos.xml?channel_id=${channelId}`);
 
-        return feed.items.map((item: any) => {
-            const mediaGroup = item.mediaGroup || {};
-            const thumbnail = mediaGroup['media:thumbnail']?.[0]?.$.url || `https://i.ytimg.com/vi/${item.id.replace('yt:video:', '')}/maxresdefault.jpg`;
+        return feed.items.map((item) => {
+            const castItem = item as any;
+            const mediaGroup = castItem.mediaGroup || {};
+            const id = (castItem.id as string || '').replace('yt:video:', '');
+            const thumbnail = mediaGroup['media:thumbnail']?.[0]?.$.url || `https://i.ytimg.com/vi/${id}/maxresdefault.jpg`;
             const views = mediaGroup['media:community']?.[0]?.['media:statistics']?.[0]?.$.views || '0';
 
             return {
-                id: item.id.replace('yt:video:', ''),
-                title: item.title,
-                link: item.link,
-                pubDate: item.pubDate,
+                id,
+                title: item.title || '',
+                link: item.link || '',
+                pubDate: item.pubDate || '',
                 thumbnail: thumbnail,
                 views: formatViews(views)
             };
